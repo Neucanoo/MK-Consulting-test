@@ -1,0 +1,47 @@
+<div class="table-wrap">
+  <table class="table">
+    <thead>
+      <tr>
+        <th 
+          *ngFor="let column of $columns" 
+          [ngClass]="'column-'+column.key"
+          [hidden]="!column.show"
+        >{{ column.label }}</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let row of $data">
+        <td 
+          *ngFor="let column of $columns"
+          [ngClass]="'column-'+column.key"
+          [hidden]="!column.show"
+        >
+          <ng-template #columns></ng-template>
+          <ng-container [ngSwitch]="column.type" *ngIf="!$customColumns?.[column.key]">
+            <ng-container *ngSwitchCase="columnTypes.String">
+              {{ row[column.key] || '—' }}
+            </ng-container>
+            <ng-container *ngSwitchCase="columnTypes.Datetime">
+              {{ row[column.key] ? (row[column.key] | date: 'dd MMM YYYY HH:mm') : '—' }}
+            </ng-container>
+            <ng-container *ngSwitchCase="columnTypes.Value">
+              <span [ngStyle]="{color: column.values[ row[column?.key] ]?.color || 'inherit'}">{{ column.values[ row[column?.key] ]?.label || '—' }}</span>
+            </ng-container>
+            <ng-container *ngSwitchCase="columnTypes.Buttons">
+              <ng-container *ngFor="let button of column.buttons">
+                <button
+                  *ngIf="button.show(row)"
+                  class="btn"
+                  type="button"
+                  matRipple
+                  [ngClass]="'_' + button.style"
+                  (click)="button.fn(row)"
+                >{{ button.label }}</button>
+              </ng-container>
+            </ng-container>
+          </ng-container>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

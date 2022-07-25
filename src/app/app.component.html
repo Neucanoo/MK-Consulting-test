@@ -1,0 +1,33 @@
+<router-outlet></router-outlet>
+
+<div class="card">
+  <div class="row">
+    <div class="checkboxes">
+      <ng-container *ngFor="let column of columns">
+        <mat-checkbox 
+          *ngIf="column?.type !== columnTypes.Buttons"
+          [(ngModel)]="column.show"
+          color="primary"
+        >{{ column.label }}</mat-checkbox>
+      </ng-container>
+    </div>
+    <button
+      type="button"
+      mat-raised-button
+      color="primary"
+      (click)="onAddRowWithRandomData()"
+    >Add row with random data</button>
+  </div>
+  <app-table 
+    [columns]="columns" 
+    [data]="tableData"
+    [customColumns]="customColumns"
+  ></app-table>
+</div>
+
+
+<!-- <h2>Material table</h2>
+<app-table-material
+  [displayedColumns]="displayedColumns"
+  [data]="tableData"
+></app-table-material> -->
